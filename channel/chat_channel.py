@@ -159,9 +159,9 @@ class ChatChannel(Channel):
         # # reply的包装步骤
         # reply = self._decorate_reply(context, reply)
 
-        reply = getZlWaitingReply()
-        self._send_reply(context, reply)
-        reply = getZlReply(context.content)
+        # reply = getZlWaitingReply()
+        # self._send_reply(context, reply)
+        reply = getZlReply(context)
         # reply的发送步骤
         self._send_reply(context, reply)
 

@@ -19,12 +19,12 @@ import requests
 #     except Exception as e:
 #         return f'[错误]: 获取答复失败！'
 
-def getAnswer(question: str):
+def getAnswer(question: str, userId):
     try:
-        url = f"http://localhost:3030/question?question={question}"
+        url = f"http://localhost:3030/question?question={question}&userId={userId}"
         headers = { 'Content-Type': 'application/json' }
         response = requests.get(url, headers=headers)
         data = response.json()
         return data['data']
     except Exception as e:
-        return f'[错误]: 获取答复失败！'
+        return f'[错误]: 获取答复失败！{str(e)}'
