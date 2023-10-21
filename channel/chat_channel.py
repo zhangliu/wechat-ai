@@ -156,6 +156,7 @@ class ChatChannel(Channel):
         # reply = self._generate_reply(context)
 
         reply = getZlReply(context)
+        if (not reply): return
         logger.debug("[WX] ready to decorate reply: {}".format(reply))
         # reply的包装步骤
         reply = self._decorate_reply(context, reply)

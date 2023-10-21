@@ -6,27 +6,28 @@ from zlExt.service import getAnswer
 
 taskMap = {}
 messageMap = {}
+MESSAGE_LIMIT = 10
 
 def getZlReply(context):
+    isGroup = context['isgroup'] or False
+
+    if (not isGroup): return handleSingle(context)
+    return handleGroup(context)
+
+def handleSingle(context):
+    msg = context['msg']
     if (context.type != ContextType.TEXT):
         return Reply(ReplyType.ERROR, '暂不支持该类型消息...')
 
-    msg = context['msg']
-    content = (context.content or msg.content or '').strip()
+    content = (context.content or '').strip()
     userId = msg.from_user_nickname or msg.from_user_id
-    # toUserId = context['receiver']
-    isGroup = context['isgroup'] or False
-    botName = msg.to_user_nickname
-
-    if (isGroup):
-        content = handleGroupReply(userId, context) or content
 
     if (taskMap.get(userId)):
         return Reply(ReplyType.TEXT, f'正在处理问题「{taskMap[userId]}」，请稍后再提问')
     taskMap[userId] = content # 记录上次的问题
 
-    logger.info(f"will get answer use: content={content}; userId={userId}; isGroup={isGroup}; botName={botName}")
-    answer = getAnswer(content, userId, isGroup, botName)
+    logger.info(f"will get answer use: content={content}; userId={userId}; isGroup={False}")
+    answer = getAnswer(content, userId, False)
 
     del taskMap[userId]
 
@@ -34,18 +35,39 @@ def getZlReply(context):
     return reply
 
 # 搜集到足够的群聊内容，就主动发表一次消息
-def handleGroupReply(groupId, context):
+def handleGroup(context):
     msg = context['msg']
-    userNickName = msg.actual_user_nickname
-    content = f'用户「{userNickName}」说: {msg.content.strip()}'
+
+    if (context.type != ContextType.TEXT):
+        if (msg.is_at): return Reply(ReplyType.ERROR, '暂不支持该类型消息...')
+        else: return
+
+    groupId = msg.from_user_nickname or msg.from_user_id
+
+    # 如果群里 @ ai 助手或者群里聊天记录数量达到阈值，就进行回复
+    if (msg.is_at):
+        if (taskMap.get(groupId)):
+            return Reply(ReplyType.TEXT, f'正在处理「{taskMap[groupId]}」，请稍后再提问')
+        taskMap[groupId] = context.content # 记录上次的问题
+
+        answer = getAnswer(context.content, groupId, isGroup=True)
+        del taskMap[groupId]
+
+        return Reply(ReplyType.TEXT, answer)
 
     messageMap.setdefault(groupId, [])
-    messageMap[groupId].append(content)
+    messageMap[groupId].append(f'用户「{msg.actual_user_nickname}」说: {msg.content}')
 
-    if (msg.is_at):
-        return json.dumps(messageMap[groupId], ensure_ascii=False)
+    if (len(messageMap[groupId]) > MESSAGE_LIMIT):
+        if (taskMap.get(groupId)): return
+        taskMap[groupId] = '系统任务'
 
-    if (len(messageMap[groupId]) >= 10):
         content = json.dumps(messageMap[groupId], ensure_ascii=False)
+        answer = getAnswer(content, groupId, isGroup=True, botName=msg.to_user_nickname)
+        messageMap[groupId].append(f'用户「msg.to_user_nickname」说：{answer}')
+
         del messageMap[groupId]
-        return content
+        del taskMap[groupId]
+
+        return Reply(ReplyType.TEXT, answer)
+    

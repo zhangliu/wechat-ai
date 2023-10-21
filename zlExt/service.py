@@ -21,7 +21,7 @@ import requests
 
 domain = 'http://localhost:3030'
 
-def getAnswer(question: str, userId, isGroup: bool, botName: str):
+def getAnswer(question: str, userId, isGroup: bool, botName: str = ''):
     try:
         url = f"{domain}/question?question={question}&userId={userId}&isGroup={int(isGroup)}&botName={botName}"
         headers = { 'Content-Type': 'application/json' }
