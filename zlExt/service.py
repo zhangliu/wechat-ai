@@ -19,9 +19,11 @@ import requests
 #     except Exception as e:
 #         return f'[错误]: 获取答复失败！'
 
-def getAnswer(question: str, userId, isGroup: bool):
+domain = 'http://localhost:3030'
+
+def getAnswer(question: str, userId, isGroup: bool, botName: str):
     try:
-        url = f"http://localhost:3030/question?question={question}&userId={userId}&isGroup={int(isGroup)}"
+        url = f"{domain}/question?question={question}&userId={userId}&isGroup={int(isGroup)}&botName={botName}"
         headers = { 'Content-Type': 'application/json' }
         response = requests.get(url, headers=headers)
         data = response.json()
