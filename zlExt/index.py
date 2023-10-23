@@ -63,7 +63,18 @@ def handleGroup(context):
         taskMap[groupId] = '系统任务'
 
         content = json.dumps(messageMap[groupId], ensure_ascii=False)
-        answer = getAnswer(content, groupId, isGroup=True, botName=msg.to_user_nickname)
+        content = f"""
+            注意，我在一个聊天群里，我会给你群里最近的一些聊天记录，
+            你需要根据聊天记录，帮我给出一个合理的高质量的回复，我回复后，要么是能活跃群里的气氛，
+            要么能够解释聊天中的一些疑问点，要么是能够给与一个中肯的结论。
+            总之，给出回复后，参与聊天的人，要么能够获得一些快乐，要么能够获得一些知识，要么能够提高一些认知，
+            就是能够有所收获。
+            当然，如果感觉不需要参与回复，你就回复「无需回答」四个字。
+            好了，下面是具体的聊天记录，我之前可能也给了你一些之前的聊天记录，你可以结合之前的聊天记录一起分析，
+            目前最新的聊天记录如下（json 格式内容）：
+            {content}
+        """
+        answer = getAnswer(content, groupId, isGroup=True)
         messageMap[groupId].append(f'用户「msg.to_user_nickname」说：{answer}')
 
         del messageMap[groupId]

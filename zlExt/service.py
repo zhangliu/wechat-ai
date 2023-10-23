@@ -21,9 +21,9 @@ import requests
 
 domain = 'http://localhost:3030'
 
-def getAnswer(question: str, userId, isGroup: bool, botName: str = ''):
+def getAnswer(prompt: str, userId, isGroup: bool):
     try:
-        url = f"{domain}/question?question={question}&userId={userId}&isGroup={int(isGroup)}&botName={botName}"
+        url = f"{domain}/wechat/prompt?prompt={prompt}&userId={userId}&isGroup={int(isGroup)}"
         headers = { 'Content-Type': 'application/json' }
         response = requests.get(url, headers=headers)
         data = response.json()
