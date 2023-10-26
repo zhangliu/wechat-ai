@@ -19,7 +19,7 @@ import requests
 #     except Exception as e:
 #         return f'[错误]: 获取答复失败！'
 
-domain = 'http://localhost'
+domain = 'http://localhost:3030'
 
 def getAnswer(prompt: str, userId, isGroup: bool):
     try:
