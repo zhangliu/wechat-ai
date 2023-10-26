@@ -3,7 +3,7 @@
   "model": "gpt-3.5-turbo",
   "channel_type": "wx",
   "proxy": "",
-  "hot_reload": false,
+  "hot_reload": true,
   "single_chat_prefix": [
     ""
   ],
