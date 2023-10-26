@@ -5,19 +5,17 @@
   "proxy": "",
   "hot_reload": false,
   "single_chat_prefix": [
-    "bot",
-    "@bot"
+    ""
   ],
-  "single_chat_reply_prefix": "[bot] ",
+  "single_chat_reply_prefix": "",
   "group_chat_prefix": [
-    "@bot"
+    ""
   ],
   "group_name_white_list": [
-    "ChatGPT测试群",
-    "ChatGPT测试群2"
+    "ALL_GROUP"
   ],
   "group_chat_in_one_session": [
-    "ChatGPT测试群"
+    "ALL_GROUP"
   ],
   "image_create_prefix": [
     "画"
