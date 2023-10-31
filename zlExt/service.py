@@ -30,3 +30,20 @@ def getAnswer(prompt: str, userId, isGroup: bool):
         return data['data']
     except Exception as e:
         return f'[错误]: 获取答复失败！{str(e)}'
+    
+def postUUID(uuid):
+    try:
+        url = f"{domain}/wechat/uuid"
+        headers = { 'Content-Type': 'application/json' }
+        body = { "uuid": uuid }
+        requests.post(url, json=body, headers=headers)
+        print("[zlExt] success set uuid:", uuid)
+    except Exception as e:
+        print("[zlExt] postUUID error:", e)
+
+def deleteUUID():
+    try:
+        url = f"{domain}/wechat/uuid"
+        requests.delete(url)
+    except Exception as e:
+        print("[zlExt] deleteUUID error:", e)
