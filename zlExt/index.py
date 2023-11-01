@@ -75,7 +75,7 @@ def handleGroup(context):
             {content}
         """
         answer = getAnswer(content, groupId, isGroup=True)
-        messageMap[groupId].append(f'用户「msg.to_user_nickname」说：{answer}')
+        messageMap[groupId].append(f'用户「{msg.to_user_nickname}」说：{answer}')
 
         del messageMap[groupId]
         del taskMap[groupId]
