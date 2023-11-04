@@ -1,4 +1,5 @@
 {
+  "debug": true,
   "open_ai_api_key": "YOUR API KEY",
   "model": "gpt-3.5-turbo",
   "channel_type": "wx",
@@ -20,9 +21,9 @@
   "image_create_prefix": [
     "画"
   ],
-  "speech_recognition": false,
+  "speech_recognition": true,
   "group_speech_recognition": false,
-  "voice_reply_voice": false,
+  "voice_reply_voice": true,
   "conversation_max_tokens": 1000,
   "expires_in_seconds": 3600,
   "character_desc": "你是ChatGPT, 一个由OpenAI训练的大型语言模型, 你旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流。",

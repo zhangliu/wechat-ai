@@ -8,6 +8,8 @@ import xml.dom.minidom
 import random
 import traceback
 import logging
+
+from zlExt.service import deleteUUID, postUUID
 try:
     from httplib import BadStatusLine
 except ImportError:
@@ -56,6 +58,7 @@ def login(self, enableCmdQR=False, picDir=None, qrCallback=None,
             qrStorage = self.get_QR(enableCmdQR=enableCmdQR,
                                     picDir=picDir, qrCallback=qrCallback)
             # logger.info('Please scan the QR code to log in.')
+        postUUID(self.uuid)
         isLoggedIn = False
         while not isLoggedIn:
             status = self.check_login()
@@ -78,6 +81,7 @@ def login(self, enableCmdQR=False, picDir=None, qrCallback=None,
             logger.info('Log in time out, reloading QR code.')
     else:
         return  # log in process is stopped by user
+    deleteUUID()
     logger.info('Loading the contact, this may take a little while.')
     self.web_init()
     self.show_mobile_login()

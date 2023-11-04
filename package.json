@@ -1,0 +1,25 @@
+{
+  "name": "wechat-ai",
+  "version": "1.0.0",
+  "description": "> ChatGPT近期以强大的对话和信息整合能力风靡全网，可以写代码、改论文、讲故事，几乎无所不能，这让人不禁有个大胆的想法，能否用他的对话模型把我们的微信打造成一个智能机器人，可以在与好友对话中给出意想不到的回应，而且再也不用担心女朋友影响我们 ~~打游戏~~ 工作了。",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "lib": "lib"
+  },
+  "scripts": {
+    "prod": "(pm2 delete app || true) && hot_reload=False pm2 start app.py --interpreter=python3 && pm2 log -f",
+    "prod-r": "(pm2 delete app || true) && reload=True pm2 start app.py --interpreter=python3 && pm2 log -f",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhangliu/wechat-ai.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhangliu/wechat-ai/issues"
+  },
+  "homepage": "https://github.com/zhangliu/wechat-ai#readme"
+}

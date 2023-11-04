@@ -12,7 +12,7 @@ from common.dequeue import Dequeue
 from common.log import logger
 from config import conf
 from plugins import *
-from zlExt.index import testReply
+from zlExt.index import getZlReply
 
 try:
     from voice.audio_convert import any_to_wav
@@ -155,11 +155,12 @@ class ChatChannel(Channel):
         # # reply的构建步骤
         # reply = self._generate_reply(context)
 
-        # logger.debug("[WX] ready to decorate reply: {}".format(reply))
-        # # reply的包装步骤
-        # reply = self._decorate_reply(context, reply)
+        reply = getZlReply(context)
+        if (not reply): return
+        logger.debug("[WX] ready to decorate reply: {}".format(reply))
+        # reply的包装步骤
+        reply = self._decorate_reply(context, reply)
 
-        reply = testReply(context.content)
         # reply的发送步骤
         self._send_reply(context, reply)
 
