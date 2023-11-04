@@ -8,7 +8,8 @@
     "lib": "lib"
   },
   "scripts": {
-    "prod": "(pm2 delete app || true) && pm2 start app.py --interpreter=python3 && pm2 log -f",
+    "prod": "(pm2 delete app || true) && hot_reload=False pm2 start app.py --interpreter=python3 && pm2 log -f",
+    "prod-r": "(pm2 delete app || true) && reload=True pm2 start app.py --interpreter=python3 && pm2 log -f",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
