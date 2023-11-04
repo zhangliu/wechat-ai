@@ -2,7 +2,8 @@ import json
 import os
 
 def getFile(groupId):
-    return f'./{groupId}_message.json'
+    dirname = os.path.dirname(__file__)
+    return f'{dirname}/../{groupId}_message.json'
 
 def appendMessage(groupId, msg, limit = 20):
     filename = getFile(groupId)
@@ -11,7 +12,7 @@ def appendMessage(groupId, msg, limit = 20):
     if (limit > 0): data = data[-limit:]
 
     with open(filename, 'w') as fp:
-        json.dump(data, fp, indent=2)
+        json.dump(data, fp, indent=2, ensure_ascii=False)
 
 def getMessages(groupId):
     filename = getFile(groupId)
