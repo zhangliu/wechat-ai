@@ -6,7 +6,7 @@ def getFile(groupId):
 
 def appendMessage(groupId, msg, limit = 20):
     filename = getFile(groupId)
-    data = getMessages()
+    data = getMessages(groupId)
     data.append(msg)
     if (limit > 0): data = data[-limit:]
 
