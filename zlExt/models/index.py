@@ -26,3 +26,8 @@ def getMessages(groupId):
     except Exception as e:
         print(e)
         return []
+    
+def clearMessage(groupId):
+    filename = getFile(groupId)
+    with open(filename, 'w') as fp:
+        pass

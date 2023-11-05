@@ -2,11 +2,11 @@ import json
 from bridge.reply import Reply, ReplyType
 from bridge.context import ContextType
 from common.log import logger
-from zlExt.models.index import appendMessage, getMessages
+from zlExt.models.index import appendMessage, clearMessage, getMessages
 from zlExt.service import getAnswer
 
 taskMap = {}
-MESSAGE_LIMIT = 10
+MESSAGE_LIMIT = 20
 
 def getZlReply(context):
     isGroup = context['isgroup'] or False
@@ -77,7 +77,7 @@ def handleGroup(context):
             {content}
         """
         answer = getAnswer(content, groupId, isGroup=True)
-        appendMessage(groupId, f'用户「{msg.to_user_nickname}」说：{answer}')
+        clearMessage(groupId)
 
         del taskMap[groupId]
 
