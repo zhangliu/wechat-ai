@@ -6,7 +6,7 @@ from zlExt.models.index import appendMessage, clearMessage, getMessages
 from zlExt.service import getAnswer
 
 taskMap = {}
-MESSAGE_LIMIT = 20
+MESSAGE_LIMIT = 10
 
 def getZlReply(context):
     isGroup = context['isgroup'] or False
@@ -59,7 +59,7 @@ def handleGroup(context):
         return Reply(ReplyType.TEXT, answer)
 
     messages = getMessages(groupId)
-    if (len(messages) > MESSAGE_LIMIT):
+    if (len(messages) >= MESSAGE_LIMIT):
         if (taskMap.get(groupId)): return
         taskMap[groupId] = '系统任务'
 
