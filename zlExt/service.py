@@ -1,4 +1,5 @@
 import requests
+import urllib.parse
 # from zlExt.config import zlConfig
 
 # def getAnswer(question: str):
@@ -23,7 +24,7 @@ domain = 'http://localhost:3030'
 
 def getAnswer(prompt: str, userId, isGroup: bool):
     try:
-        url = f"{domain}/wechat/prompt?prompt={prompt}&userId={userId}&isGroup={int(isGroup)}"
+        url = f"{domain}/wechat/prompt?prompt={urllib.parse.quote(prompt)}&userId={userId}&isGroup={int(isGroup)}"
         headers = { 'Content-Type': 'application/json' }
         response = requests.get(url, headers=headers)
         data = response.json()
