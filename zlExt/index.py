@@ -77,7 +77,7 @@ def handleGroup(context):
             {content}
         """
         answer = getAnswer(content, groupId, isGroup=True)
-        clearMessage(groupId)
+        clearMessage(groupId, MESSAGE_LIMIT)
 
         del taskMap[groupId]
 

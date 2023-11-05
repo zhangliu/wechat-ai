@@ -27,7 +27,12 @@ def getMessages(groupId):
         print(e)
         return []
     
-def clearMessage(groupId):
+def clearMessage(groupId, limit = 10):
     filename = getFile(groupId)
+    data = getMessages(groupId)
+    
+    if (len(data) <= limit): return
+
+    data = data[-limit:]
     with open(filename, 'w') as fp:
-        pass
+        json.dump(data, fp, indent=2, ensure_ascii=False)
