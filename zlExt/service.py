@@ -27,9 +27,10 @@ domain = 'http://3.26.39.67' if os.environ.get('USER') == 'bytedance' else 'http
 
 def getAnswer(prompt: str, userId, isGroup: bool):
     try:
-        url = f"{domain}/wechat/prompt?prompt={urllib.parse.quote(prompt)}&userId={userId}&isGroup={int(isGroup)}"
+        url = f"{domain}/wechat/prompt?userId={userId}&isGroup={int(isGroup)}"
         headers = { 'Content-Type': 'application/json' }
-        response = requests.get(url, headers=headers)
+        body = { "prompt": prompt }
+        response = requests.post(url, json=body, headers=headers)
         data = response.json()
         return data['data']
     except Exception as e:
