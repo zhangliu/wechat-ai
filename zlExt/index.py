@@ -2,7 +2,7 @@ import json
 from bridge.reply import Reply, ReplyType
 from bridge.context import ContextType
 from common.log import logger
-from zlExt.models.index import appendMessage, clearMessage, getMessages
+from zlExt.models.index import appendMessage, getMessages
 from zlExt.service import getAnswer
 
 taskMap = {}
@@ -46,23 +46,14 @@ def handleGroup(context):
 
     appendMessage(groupId, f'用户「{msg.actual_user_nickname}」说: {msg.content}')
 
-    # 如果群里 @ ai 助手或者群里聊天记录数量达到阈值，就进行回复
-    if (msg.is_at):
-        if (taskMap.get(groupId)):
-            return Reply(ReplyType.TEXT, f'正在处理「{taskMap[groupId]}」，请稍后再提问')
-        taskMap[groupId] = context.content # 记录上次的问题
+    if not msg.is_at: return
+    if (taskMap.get(groupId)):
+        return Reply(ReplyType.TEXT, f'正在处理「{taskMap[groupId]}」，请稍后再试')
 
-        answer = getAnswer(context.content, groupId, isGroup=True)
-        appendMessage(groupId, f'用户「{msg.to_user_nickname}」说：{answer}')
-        del taskMap[groupId]
-
-        return Reply(ReplyType.TEXT, answer)
-
-    messages = getMessages(groupId)
-    if (len(messages) >= MESSAGE_LIMIT):
-        if (taskMap.get(groupId)): return
+    isSumary = (context.content or '') == '总结一下'
+    if (isSumary):
         taskMap[groupId] = '系统任务'
-
+        messages = getMessages(groupId)
         content = json.dumps(messages, ensure_ascii=False)
         content = f"""
             注意，我是在一个聊天群里，我会给你群里最近的一些聊天记录，
@@ -77,9 +68,16 @@ def handleGroup(context):
             {content}
         """
         answer = getAnswer(content, groupId, isGroup=True)
-        clearMessage(groupId, MESSAGE_LIMIT)
-
         del taskMap[groupId]
+        appendMessage(groupId, f'用户「{msg.to_user_nickname}」说：{answer}')
+
+        return Reply(ReplyType.TEXT, answer)
+    else:
+        taskMap[groupId] = context.content # 记录上次的问题
+
+        answer = getAnswer(context.content, groupId, isGroup=True)
+        del taskMap[groupId]
+        appendMessage(groupId, f'用户「{msg.to_user_nickname}」说：{answer}')
 
         return Reply(ReplyType.TEXT, answer)
     
