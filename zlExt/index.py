@@ -44,8 +44,6 @@ def handleGroup(context):
 
     groupId = msg.from_user_nickname or msg.from_user_id
 
-    appendMessage(groupId, f'用户「{msg.actual_user_nickname}」说: {msg.content}')
-
     if not msg.is_at: return
     if (taskMap.get(groupId)):
         return Reply(ReplyType.TEXT, f'正在处理「{taskMap[groupId]}」，请稍后再试')
@@ -69,10 +67,10 @@ def handleGroup(context):
         """
         answer = getAnswer(content, groupId, isGroup=True)
         del taskMap[groupId]
-        appendMessage(groupId, f'用户「{msg.to_user_nickname}」说：{answer}')
 
         return Reply(ReplyType.TEXT, answer)
     else:
+        appendMessage(groupId, f'用户「{msg.actual_user_nickname}」说: {msg.content}')
         taskMap[groupId] = context.content # 记录上次的问题
 
         answer = getAnswer(context.content, groupId, isGroup=True)
