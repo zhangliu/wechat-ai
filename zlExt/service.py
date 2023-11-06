@@ -1,4 +1,6 @@
 import requests
+import urllib.parse
+import os
 # from zlExt.config import zlConfig
 
 # def getAnswer(question: str):
@@ -19,13 +21,16 @@ import requests
 #     except Exception as e:
 #         return f'[错误]: 获取答复失败！'
 
-domain = 'http://localhost:3030'
+# domain = 'http://localhost:3030'
+# 如果运行在mac电脑本地，就用云上的服务，否则在云上，就用本地的服务
+domain = 'http://3.26.39.67' if os.environ.get('USER') == 'bytedance' else 'http://localhost:3030'
 
 def getAnswer(prompt: str, userId, isGroup: bool):
     try:
-        url = f"{domain}/wechat/prompt?prompt={prompt}&userId={userId}&isGroup={int(isGroup)}"
+        url = f"{domain}/wechat/prompt?userId={userId}&isGroup={int(isGroup)}"
         headers = { 'Content-Type': 'application/json' }
-        response = requests.get(url, headers=headers)
+        body = { "prompt": prompt }
+        response = requests.post(url, json=body, headers=headers)
         data = response.json()
         return data['data']
     except Exception as e:
