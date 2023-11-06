@@ -48,7 +48,7 @@ def handleGroup(context):
     if (taskMap.get(groupId)):
         return Reply(ReplyType.TEXT, f'正在处理「{taskMap[groupId]}」，请稍后再试')
 
-    isSumary = (context.content or '') == '总结一下'
+    isSumary = context.content == '你怎么看' or context.content == '你觉得呢'
     if (isSumary):
         taskMap[groupId] = '系统任务'
         messages = getMessages(groupId)
