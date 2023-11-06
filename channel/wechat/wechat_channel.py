@@ -23,6 +23,7 @@ from common.time_check import time_checker
 from config import conf, get_appdata_dir
 from lib import itchat
 from lib.itchat.content import *
+from zlExt.index import handleSelfMsg
 
 
 @itchat.msg_register([TEXT, VOICE, PICTURE, NOTE, ATTACHMENT, SHARING])
@@ -60,6 +61,7 @@ def _check(func):
             return
         if cmsg.my_msg and not cmsg.is_group:
             logger.debug("[WX]my message {} skipped".format(msgId))
+            handleSelfMsg(itchat)
             return
         return func(self, cmsg)
 
