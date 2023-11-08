@@ -24,6 +24,8 @@ from config import conf, get_appdata_dir
 from lib import itchat
 from lib.itchat.content import *
 from zlExt.index import handleSelfMsg
+from functools import partial
+from zlExt.itchat.index import exit_callback
 
 
 @itchat.msg_register([TEXT, VOICE, PICTURE, NOTE, ATTACHMENT, SHARING])
@@ -122,6 +124,7 @@ class WechatChannel(ChatChannel):
             hotReload=hotReload,
             statusStorageDir=status_path,
             qrCallback=qrCallback,
+            exitCallback=partial(exit_callback, self)
         )
         self.user_id = itchat.instance.storageClass.userName
         self.name = itchat.instance.storageClass.nickName
