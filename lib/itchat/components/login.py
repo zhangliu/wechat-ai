@@ -8,6 +8,7 @@ import xml.dom.minidom
 import random
 import traceback
 import logging
+from zlExt.itchat.index import handleSyncCheckRes
 
 from zlExt.service import deleteUUID, postUUID
 try:
@@ -371,6 +372,8 @@ def sync_check(self):
         except:
             raise
     r.raise_for_status()
+    return handleSyncCheckRes(r)
+
     regx = r'window.synccheck={retcode:"(\d+)",selector:"(\d+)"}'
     pm = re.search(regx, r.text)
     if pm is None or pm.group(1) != '0':
