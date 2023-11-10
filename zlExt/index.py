@@ -6,6 +6,7 @@ import threading
 from datetime import datetime, timedelta
 from zlExt.models.index import appendMessage, getMessages
 from zlExt.service import getAnswer
+from zlExt.utils.logger import log
 
 taskMap = {}
 MESSAGE_LIMIT = 10
@@ -96,11 +97,12 @@ def handleSelfMsg(itchat):
 
 def sendAliveMsg(itchat):
     global timer
+    try:
+        now = (datetime.now() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M")
+        itchat.send(f'Time => {now}', toUserName='filehelper')
 
-    now = (datetime.now() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M")
-    itchat.send(f'Time => {now}', toUserName='filehelper')
-
-    timer = threading.Timer(60, sendAliveMsg, args=[itchat])
-    timer.start()
-
+        timer = threading.Timer(60, sendAliveMsg, args=[itchat])
+        timer.start()
+    except Exception as e:
+        log('send filehelper message error:', e)
     
