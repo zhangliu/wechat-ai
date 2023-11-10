@@ -105,4 +105,5 @@ def sendAliveMsg(itchat):
         timer.start()
     except Exception as e:
         log('send filehelper message error:', e)
+        raise e
     
