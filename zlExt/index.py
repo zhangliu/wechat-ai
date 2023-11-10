@@ -3,7 +3,7 @@ from bridge.reply import Reply, ReplyType
 from bridge.context import ContextType
 from common.log import logger
 import threading
-from datetime import datetime
+from datetime import datetime, timedelta
 from zlExt.models.index import appendMessage, getMessages
 from zlExt.service import getAnswer
 
@@ -82,21 +82,25 @@ def handleGroup(context):
         return Reply(ReplyType.TEXT, answer)
 
 # 向文件助手定时发消息来保活
-isAlive = False
+timer = None
 
 def handleSelfMsg(itchat):
-    global isAlive
+    global timer
 
-    if isAlive: return
-    isAlive = True
+    if timer:
+        timer.cancel()
+        timer.join()
+        timer = None
 
     sendAliveMsg(itchat)
 
 def sendAliveMsg(itchat):
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    global timer
+
+    now = (datetime.now() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M")
     itchat.send(f'Time => {now}', toUserName='filehelper')
 
-    timer = threading.Timer(30, sendAliveMsg, args=[itchat])
+    timer = threading.Timer(60, sendAliveMsg, args=[itchat])
     timer.start()
 
     
