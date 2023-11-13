@@ -40,14 +40,21 @@ def handleSingle(context):
 # 搜集到足够的群聊内容，就主动发表一次消息
 def handleGroup(context):
     msg = context['msg']
-
-    if (context.type != ContextType.TEXT):
-        if (msg.is_at): return Reply(ReplyType.ERROR, '暂不支持该类型消息...')
-        else: return
-
     groupId = msg.from_user_nickname or msg.from_user_id
 
-    if not msg.is_at: return
+    if (msg.is_at): handleGroupAt(context)
+    else:
+        if (context.type != ContextType.TEXT): return
+        appendMessage(groupId, f'用户「{msg.actual_user_nickname}」说: {msg.content}')
+
+
+def handleGroupAt(context):
+    msg = context['msg']
+    groupId = msg.from_user_nickname or msg.from_user_id
+
+    if (context.type != ContextType.TEXT):
+        return Reply(ReplyType.ERROR, '暂不支持该类型消息...')
+
     if (taskMap.get(groupId)):
         return Reply(ReplyType.TEXT, f'正在处理「{taskMap[groupId]}」，请稍后再试')
 
@@ -71,9 +78,9 @@ def handleGroup(context):
 
         return Reply(ReplyType.TEXT, answer)
     else:
-        appendMessage(groupId, f'用户「{msg.actual_user_nickname}」说: {msg.content}')
         taskMap[groupId] = context.content # 记录上次的问题
 
+        appendMessage(groupId, f'用户「{msg.actual_user_nickname}」说: {msg.content}')
         answer = getAnswer(context.content, groupId, isGroup=True)
         del taskMap[groupId]
         appendMessage(groupId, f'用户「{msg.to_user_nickname}」说：{answer}')
