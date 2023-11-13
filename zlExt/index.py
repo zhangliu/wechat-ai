@@ -42,10 +42,10 @@ def handleGroup(context):
     msg = context['msg']
     groupId = msg.from_user_nickname or msg.from_user_id
 
-    if (msg.is_at): handleGroupAt(context)
-    else:
-        if (context.type != ContextType.TEXT): return
-        appendMessage(groupId, f'用户「{msg.actual_user_nickname}」说: {msg.content}')
+    if (msg.is_at): return handleGroupAt(context)
+
+    if (context.type != ContextType.TEXT): return
+    appendMessage(groupId, f'用户「{msg.actual_user_nickname}」说: {msg.content}')
 
 
 def handleGroupAt(context):
