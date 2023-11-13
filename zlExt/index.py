@@ -51,18 +51,16 @@ def handleGroup(context):
     if (taskMap.get(groupId)):
         return Reply(ReplyType.TEXT, f'正在处理「{taskMap[groupId]}」，请稍后再试')
 
-    isSumary = context.content == '你怎么看' or context.content == '你觉得呢'
+    isSumary = context.content == '总结一下'
     if (isSumary):
         taskMap[groupId] = '系统任务'
         messages = getMessages(groupId)
         content = json.dumps(messages, ensure_ascii=False)
         content = f"""
             注意，我是在一个聊天群里，我会给你群里最近的一些聊天记录，
-            你需要根据聊天记录，给出合适的回复，回复的目的是能够帮助到别人，例如：
-            1. 能够帮助解答某些人的问题。
-            2. 能够安慰到别人。
-            3. 能够给与别人一些中肯的建议。
-            4. 能够发现别人的亮点，给与合适真诚的赞扬。
+            你需要根据聊天记录，提炼大概得内容，给出一段简短的总结，并且如果需要，可以：
+            1. 帮助解答某些人的问题。
+            2. 发现别人的亮点，给与中肯真诚的赞扬。
             注意，直接用我的口吻给出简洁的回复即可，
             我会直接拷贝你的回复到群里的，所以不要让群里看出我是一个 AI，或者知道我是借助你进行回复的。
             好了，下面是近期具体的聊天记录（json 格式）：
