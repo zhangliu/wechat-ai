@@ -5,7 +5,7 @@ def getFile(groupId):
     dirname = os.path.dirname(__file__)
     return f'{dirname}/../{groupId}_message.json'
 
-def appendMessage(groupId, msg, limit = 7):
+def appendMessage(groupId, msg, limit = 10):
     filename = getFile(groupId)
     data = getMessages(groupId)
     data.append(msg)
