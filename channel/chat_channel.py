@@ -159,7 +159,7 @@ class ChatChannel(Channel):
         if (not reply): return
         logger.debug("[WX] ready to decorate reply: {}".format(reply))
         # reply的包装步骤
-        reply = self._decorate_reply(context, reply)
+        # reply = self._decorate_reply(context, reply)
 
         # reply的发送步骤
         self._send_reply(context, reply)
