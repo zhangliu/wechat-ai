@@ -59,13 +59,13 @@ def handleGroupAt(context):
         return Reply(ReplyType.TEXT, f'正在处理「{taskMap[groupId]}」，请稍后再试')
 
     taskMap[groupId] = context.content # 记录上次的问题
-    appendMessage(groupId, f'用户「{msg.actual_user_nickname}」说: {msg.content}')
+    appendMessage(groupId, f'用户「{msg.actual_user_nickname}」问: {msg.content}')
     messages = getMessages(groupId)
     content = json.dumps(messages, ensure_ascii=False)
     content = f"""
-        注意，你现在在一个聊天群里，你需要根据群里最近的聊天记录，给出恰当的回复，回复的主要目的是：
+        注意，你现在在一个聊天群里，你在群里的名字叫：「{msg.to_user_nickname}」，你需要根据群里最近的聊天记录，给出恰当的回复，回复的主要目的是：
         1. 结合聊天上下文，帮助解答问题。
-        2. 结合聊天上下文，发现别人的亮点，给与的赞扬，让他更喜欢你。
+        2. 结合聊天上下文，发现别人的亮点，给与赞扬，让他更喜欢你。
         回复时请注意：
         1. 你在群里的名字叫：「{msg.to_user_nickname}」，如果某个人 @ 你的名字，表示他在主动询问你，如果聊天中 @ 你多次，你只需回复最后一个问题即可。
         2. 请务必结合上下文给出比较简洁口语化的回复，内容最好不要超过 30 个字！
@@ -74,7 +74,7 @@ def handleGroupAt(context):
     """
     answer = getAnswer(content, groupId, isGroup=True)
     del taskMap[groupId]
-    appendMessage(groupId, f'用户「{msg.to_user_nickname}」说：{answer}')
+    appendMessage(groupId, f'用户「{msg.to_user_nickname}」回复：{answer}')
 
     return Reply(ReplyType.TEXT, answer)
 
@@ -102,4 +102,3 @@ def sendAliveMsg(itchat):
     except Exception as e:
         log('send filehelper message error:', e)
         raise e
-    
