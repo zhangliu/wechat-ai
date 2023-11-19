@@ -154,13 +154,13 @@ class ChatChannel(Channel):
             return
         logger.debug("[WX] ready to handle context: {}".format(context))
         # # reply的构建步骤
-        # reply = self._generate_reply(context)
+        reply = self._generate_reply(context)
 
-        reply = getZlReply(context)
+        # reply = getZlReply(context)
         if (not reply): return
         logger.debug("[WX] ready to decorate reply: {}".format(reply))
         # reply的包装步骤
-        # reply = self._decorate_reply(context, reply)
+        reply = self._decorate_reply(context, reply)
 
         # reply的发送步骤
         self._send_reply(context, reply)
