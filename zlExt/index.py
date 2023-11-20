@@ -9,7 +9,7 @@ from zlExt.service import getAnswer
 from zlExt.utils.logger import log
 
 taskMap = {}
-MESSAGE_LIMIT = 10
+MESSAGE_LIMIT = 20
 
 def getZlReply(context):
     isGroup = context['isgroup'] or False
