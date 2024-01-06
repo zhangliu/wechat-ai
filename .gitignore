@@ -31,3 +31,6 @@ plugins/banwords/lib/__pycache__
 !plugins/role
 !plugins/keyword
 !plugins/linkai
+
+# zl custom
+zlTest.py
