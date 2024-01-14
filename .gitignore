@@ -33,4 +33,4 @@ plugins/banwords/lib/__pycache__
 !plugins/linkai
 
 # zl custom
-zlTest.py
+zlExt/utils/historyMsg/data/*.json

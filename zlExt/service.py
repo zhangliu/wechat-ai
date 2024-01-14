@@ -37,6 +37,7 @@ def getAnswer(prompt: str, userId, isGroup: bool):
         return f'[错误]: 获取答复失败！{str(e)}'
     
 def postUUID(uuid):
+    return # TODO zl 临时注释掉，因为现在微信助手很稳定了，不需要利用 uuid 经常登录
     try:
         url = f"{domain}/wechat/uuid"
         headers = { 'Content-Type': 'application/json' }
