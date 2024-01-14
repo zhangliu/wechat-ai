@@ -49,7 +49,8 @@ def getTextAnswer(msg, history=[]):
         response = runTimes(3, 30, requests.post, f'{textAiUrl}?key={apiKey}', json=body, headers=headers)
         data = response.json()
 
-        if ('error' in data): raise Exception(data['error']['message'])
+        if ('error' in data): raise Exception(data['error'])
+        if ('promptFeedback' in data): raise Exception(data)
 
         answer = data['candidates'][0]['content']['parts'][0]['text']
         return answer

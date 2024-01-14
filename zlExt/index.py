@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 import zlExt.bots.gemini.index as gemini
 import zlExt.bots.gemini.history as geminiHistory
 from zlExt.utils.logger import log
-import zlExt.utils.historyMsg.index as historyMsg
 import zlExt.utils.promptHelper.commonPrompt as commonPrompt
 
 taskMap = {}
@@ -57,7 +56,8 @@ def handleGroup(context):
     if (msg.is_at): return handleGroupAt(context)
     if (context.type != ContextType.TEXT): return
 
-    historyMsg.appendGroupMessage(groupId, f'用户「{msg.actual_user_nickname}」说: {msg.content}')
+    geminiHistory.appendGroupUserMessage(groupId, f'用户「{msg.actual_user_nickname}」说: {msg.content}')
+    geminiHistory.appendGroupModelMessage(groupId, f'收到，你的消息我先记下了')
 
 def handleGroupAt(context):
     msg = context['msg']
@@ -71,12 +71,11 @@ def handleGroupAt(context):
     taskMap[groupId] = context.content # 记录上次的问题
 
     try:
-        historyMsg.appendGroupMessage(groupId, f'用户「{msg.actual_user_nickname}」问: {msg.content}')
-
-        history = historyMsg.getGroupMessages(groupId)
-        prompt = commonPrompt.getPrompt(msg, history)
-        answer = gemini.getTextAnswer({"content": prompt})
-        historyMsg.appendGroupMessage(groupId, f'用户「{msg.to_user_nickname}」回复：{answer}')
+        history = geminiHistory.getGroupMessages(groupId)
+        history = geminiHistory.addPrompt(history, commonPrompt.getPrompt(msg))
+        answer = gemini.getTextAnswer({"content": context.content}, history)
+        geminiHistory.appendGroupUserMessage(groupId, f'用户「{msg.actual_user_nickname}」问: {msg.content}')
+        geminiHistory.appendGroupModelMessage(groupId, answer)
 
         return Reply(ReplyType.TEXT, answer)
     except Exception as e:
