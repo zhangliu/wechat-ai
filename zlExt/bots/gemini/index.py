@@ -50,7 +50,7 @@ def getTextAnswer(msg, history=[]):
         data = response.json()
 
         if ('error' in data): raise Exception(data['error'])
-        if ('promptFeedback' in data): raise Exception(data)
+        if ('candidates' not in data): raise Exception(data)
 
         answer = data['candidates'][0]['content']['parts'][0]['text']
         return answer
