@@ -10,6 +10,7 @@
   "scripts": {
     "prod": "(pm2 delete app || true) && API_KEY= hot_reload=False pm2 start app.py --interpreter=python3 && pm2 log -f",
     "prod-r": "(pm2 delete app || true) && API_KEY= hot_reload=True pm2 start app.py --interpreter=python3 && pm2 log -f",
+    "clear": "rm -rf zlExt/utils/historyMsg/data/*.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
