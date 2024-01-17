@@ -1,3 +1,4 @@
+import json
 from bridge.reply import Reply, ReplyType
 from bridge.context import ContextType
 from common.log import logger
@@ -5,8 +6,10 @@ import threading
 from datetime import datetime, timedelta
 import zlExt.bots.gemini.index as gemini
 import zlExt.bots.gemini.history as geminiHistory
+import zlExt.utils.historyMsg.index as historyMsg
 from zlExt.utils.logger import log
-import zlExt.utils.promptHelper.commonPrompt as commonPrompt
+# import zlExt.utils.promptHelper.commonPrompt as commonPrompt
+import zlExt.service as service
 
 taskMap = {}
 MESSAGE_LIMIT = 20
@@ -56,8 +59,7 @@ def handleGroup(context):
     if (msg.is_at): return handleGroupAt(context)
     if (context.type != ContextType.TEXT): return
 
-    geminiHistory.appendGroupUserMessage(groupId, f'用户「{msg.actual_user_nickname}」说: {msg.content}')
-    geminiHistory.appendGroupModelMessage(groupId, f'收到，你的消息我先记下了')
+    historyMsg.appendGroupMessage(groupId, f'「{msg.actual_user_nickname}」说: {msg.content}')
 
 def handleGroupAt(context):
     msg = context['msg']
@@ -71,11 +73,13 @@ def handleGroupAt(context):
     taskMap[groupId] = context.content # 记录上次的问题
 
     try:
-        history = geminiHistory.getGroupMessages(groupId)
-        history = geminiHistory.addPrompt(history, commonPrompt.getPrompt(msg))
-        answer = gemini.getTextAnswer({"content": context.content}, history)
-        geminiHistory.appendGroupUserMessage(groupId, f'用户「{msg.actual_user_nickname}」问: {msg.content}')
-        geminiHistory.appendGroupModelMessage(groupId, answer)
+        historyMsg.appendGroupMessage(groupId, f'「{msg.actual_user_nickname}」问: {msg.content}')
+        messages = historyMsg.getGroupMessages(groupId)
+        prompt = json.dumps(messages, ensure_ascii=False)
+        # prompt = commonPrompt.getPrompt(msg, messages)
+        # answer = gemini.getTextAnswer({"content": prompt})
+        answer = service.getBardAnswer(prompt, groupId, True)
+        historyMsg.appendGroupMessage(groupId, f'「{msg.to_user_nickname}」回答: {msg.content}')
 
         return Reply(ReplyType.TEXT, answer)
     except Exception as e:

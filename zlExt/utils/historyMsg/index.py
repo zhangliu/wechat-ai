@@ -6,7 +6,7 @@ def getFile(id, isGroup=False):
     if isGroup: return f'{dirname}/data/group_{id}_message.json'
     else: return f'{dirname}/data/single_{id}_message.json'
 
-def appendMessage(id, msg, isGroup=False, limit = 20):
+def appendMessage(id, msg, isGroup=False, limit = 2000):
     filename = getFile(id, isGroup)
     data = getMessages(id, isGroup)
     data.append(msg)
@@ -15,7 +15,7 @@ def appendMessage(id, msg, isGroup=False, limit = 20):
     with open(filename, 'w') as fp:
         json.dump(data, fp, indent=2, ensure_ascii=False)
 
-def appendGroupMessage(id, msg, limit = 20):
+def appendGroupMessage(id, msg, limit = 2000):
     return appendMessage(id, msg, True, limit)
 
 def getMessages(id, isGroup=False):
