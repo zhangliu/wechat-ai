@@ -78,7 +78,7 @@ def handleGroupAt(context):
         prompt = json.dumps(messages, ensure_ascii=False)
         # prompt = commonPrompt.getPrompt(msg, messages)
         # answer = gemini.getTextAnswer({"content": prompt})
-        answer = service.getBardAnswer(prompt, groupId, msg.to_user_nickname True)
+        answer = service.getBardAnswer(prompt, groupId, msg.to_user_nickname, True)
         historyMsg.appendGroupMessage(groupId, f'「{msg.to_user_nickname}」回答: {answer}')
 
         return Reply(ReplyType.TEXT, answer)
