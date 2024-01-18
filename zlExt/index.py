@@ -79,6 +79,7 @@ def handleGroupAt(context):
         # prompt = commonPrompt.getPrompt(msg, messages)
         # answer = gemini.getTextAnswer({"content": prompt})
         answer = service.getBardAnswer(prompt, groupId, msg.to_user_nickname, True)
+        # limitAnswer = f'{answer[:200]}...' if len(answer) > 200 else answer
         historyMsg.appendGroupMessage(groupId, f'「{msg.to_user_nickname}」回答: {answer}')
 
         return Reply(ReplyType.TEXT, answer)
