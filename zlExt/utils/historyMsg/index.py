@@ -18,7 +18,7 @@ def appendMessage(id, msg, isGroup=False, limit = 2000):
 def appendGroupMessage(id, msg, limit = 2000):
     return appendMessage(id, msg, True, limit)
 
-def getMessages(id, isGroup=False):
+def getMessages(id, isGroup=False, limit=20):
     filename = getFile(id, isGroup)
     if (not os.path.exists(filename)):
         fp = open(filename, 'w')
@@ -26,13 +26,14 @@ def getMessages(id, isGroup=False):
 
     try:
         with open(filename, '+r') as fp:
-            return json.load(fp) or []
+            data = json.load(fp) or []
+            return data[-limit:]
     except Exception as e:
         print(e)
         return []
 
-def getGroupMessages(id):
-    return getMessages(id, True)
+def getGroupMessages(id, limit = 20):
+    return getMessages(id, True, limit)
     
 def clearMessage(id, isGroup=False, limit = 10):
     filename = getFile(id, isGroup)
