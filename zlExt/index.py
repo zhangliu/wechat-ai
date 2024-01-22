@@ -92,9 +92,13 @@ def handleGroupAt(context):
 
 def handleGroupNoAt(context):
     msg = context['msg']
+    askUser = msg.actual_user_nickname
     groupId = msg.from_user_nickname or msg.from_user_id
     content = (context.content or '').strip()
-    if (groupId != 'Ai助手测试群'): return
+
+    if (askUser != '大柳树'): return
+    if (askUser != '乔木'): return
+    # if (groupId != 'Ai助手测试群'): return
     if (context.type != ContextType.TEXT): return
 
     try:
