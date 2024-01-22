@@ -95,7 +95,7 @@ def handleGroupNoAt(context):
     aiName = msg.to_user_nickname
     groupId = msg.from_user_nickname or msg.from_user_id
     content = (context.content or '').strip()
-    print(f'[handleGroupNoAt] will get answer use: content={content}; groupId={groupId}, xxxxxxxxxxxxxxxxxx')
+    print(f'[handleGroupNoAt] will get answer use: content={aiName}; groupId={groupId}, xxxxxxxxxxxxxxxxxx')
     if (aiName != 'Ai助手测试群'): return
     if (context.type != ContextType.TEXT): return
 
