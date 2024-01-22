@@ -96,6 +96,7 @@ def handleGroupNoAt(context):
     groupId = msg.from_user_nickname or msg.from_user_id
     content = (context.content or '').strip()
 
+    print(askUser, 'xxxxxxxxxxxxxxxxxxxxxxxx')
     if (askUser != '大柳树'): return
     if (askUser != '乔木'): return
     # if (groupId != 'Ai助手测试群'): return
