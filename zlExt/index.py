@@ -9,6 +9,7 @@ import zlExt.bots.gemini.history as geminiHistory
 import zlExt.utils.historyMsg.index as historyMsg
 from zlExt.utils.logger import log
 # import zlExt.utils.promptHelper.commonPrompt as commonPrompt
+import zlExt.utils.promptHelper.englishPrompt as englishPrompt
 import zlExt.service as service
 
 taskMap = {}
@@ -57,6 +58,7 @@ def handleGroup(context):
     groupId = msg.from_user_nickname or msg.from_user_id
 
     if (msg.is_at): return handleGroupAt(context)
+    if (not msg.is_at): return handleGroupNoAt(context)
     if (context.type != ContextType.TEXT): return
 
     historyMsg.appendGroupMessage(groupId, f'「{msg.actual_user_nickname}」说: {msg.content}')
@@ -87,6 +89,29 @@ def handleGroupAt(context):
         return Reply(ReplyType.TEXT, str(e)[:120])
     finally:
         del taskMap[groupId]
+
+def handleGroupNoAt(context):
+    msg = context['msg']
+    aiName = msg.to_user_nickname
+    groupId = msg.from_user_nickname or msg.from_user_id
+    content = (context.content or '').strip()
+
+    if (aiName != 'Ai助手测试群'): return
+    if (context.type != ContextType.TEXT): return
+
+    try:
+        logger.info(f"will get answer use: content={content}; groupId={groupId}")
+        
+        prePrompt = englishPrompt.getPrompt(msg)
+        answer = gemini.getTextAnswer({"content": prePrompt}, history=[])
+        geminiHistory.appendMessage(groupId, {"content": msg.content, "role": "user"})
+        geminiHistory.appendMessage(groupId, {"content": answer, "role": "model"})
+
+        reply = Reply(ReplyType.TEXT, answer)
+        return reply
+    except Exception as e:
+        return Reply(ReplyType.TEXT, str(e)[:120])
+
 
 # 向文件助手定时发消息来保活
 timer = None
