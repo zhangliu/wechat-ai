@@ -92,7 +92,7 @@ def handleGroupAt(context):
 
 def handleGroupNoAt(context):
     msg = context['msg']
-    askUser = msg.actual_user_nickname
+    askUser = (msg.actual_user_nickname or '').strip()
     groupId = msg.from_user_nickname or msg.from_user_id
     content = (context.content or '').strip()
 
